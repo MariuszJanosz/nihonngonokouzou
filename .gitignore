@@ -1,0 +1,6 @@
+# Venv
+.venv
+
+# Output
+scripts/words_urls.txt
+
