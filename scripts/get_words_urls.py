@@ -43,9 +43,9 @@ def split(src: str, split: str) -> (str, str):
 
 
 if __name__ == "__main__":
-    session = requests.Session()
     with open("words_urls.txt", "w") as f:
         for tail in URL_TAILS:
+            session = requests.Session()
             page_number = 1
             words = []
             while True:

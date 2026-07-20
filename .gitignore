@@ -4,3 +4,5 @@
 # Output
 scripts/words_urls.txt
 
+# Python
+**/__pycache__/
