@@ -11,3 +11,4 @@ words_urls_formated.txt
 
 # Postgres
 postgresql/db/
+postgresql/*.log
