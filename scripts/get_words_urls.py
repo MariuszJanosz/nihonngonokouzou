@@ -28,8 +28,12 @@ URL_TAILS = [
         ]
 
 
-def get_page(url: str, session: requests.Session) -> str:
-    r = requests.get(url)
+def get_page(url: str, session: requests.Session | None = None) -> str:
+    if session:
+        r = session.get(url)
+    else:
+        r = requests.get(url)
+
     if r.status_code != 200:
         raise Exception(f"Faild to GET {url}")
     return r.text
