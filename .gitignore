@@ -8,3 +8,7 @@ words_urls_formated.txt
 
 # Python
 **/__pycache__/
+
+# Postgres
+postgresql/db/
+postgresql/*.log
