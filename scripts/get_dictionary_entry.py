@@ -1,5 +1,3 @@
-import sys
-
 import requests
 
 
@@ -22,9 +20,20 @@ def split(src: str, split: str) -> (str, str):
 
 
 if __name__ == "__main__":
-    if (len(sys.argv) != 2):
-        print("Usage: python get_dictionary_entry.py <URL>")
-        raise Exception("Incorrect number of arguments")
+    with open("words_urls_formated.txt", "r") as f:
+        with open("dictionary_entries.txt", "w") as g:
+            session = requests.Session()
+            session_reset = 0 # One session per 1000 requests
+            for line in f:
+                url = line.split(" ")[-1].strip()
+                print(f"GET {url}")
+                page = get_page(url, session)
+                _, page = split(page, "<!--開始 デジタル大辞泉 -->\n")
+                page, _ = split(page, "<!--終了 デジタル大辞泉-->")
+                g.write(page)
 
-    page = get_page(sys.argv[1])
-    print(page)
+                session_reset += 1
+                if session_reset >= 1000:
+                    session_reset = 0
+                    del session
+                    session = requests.Session()
