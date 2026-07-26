@@ -4,9 +4,19 @@ import threading
 
 def get_page(url: str, session: requests.Session | None = None) -> str:
     if session:
-        r = session.get(url)
+        try:
+            r = session.get(url, timeout=5)
+        except requests.exceptions.Timeout:
+            print(f"Blocked {url}")
+            del session
+            session = requests.Session()
+            return get_page(url, session)
     else:
-        r = requests.get(url)
+        try:
+            r = requests.get(url, timeout=5)
+        except requests.exceptions.Timeout:
+            print(f"Blocked {url}")
+            return get_page(url)
 
     if r.status_code != 200:
         raise Exception(f"Faild to GET {url}")
