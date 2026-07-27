@@ -1,5 +1,6 @@
 import requests
 import threading
+import time
 
 
 def get_page(url: str, session: requests.Session | None = None) -> str:
@@ -7,19 +8,23 @@ def get_page(url: str, session: requests.Session | None = None) -> str:
         try:
             r = session.get(url, timeout=5)
         except requests.exceptions.Timeout:
-            print(f"Blocked {url}")
+            print(f"Blocked {url}, retrying...")
             del session
+            time.sleep(5)
             session = requests.Session()
             return get_page(url, session)
     else:
         try:
             r = requests.get(url, timeout=5)
         except requests.exceptions.Timeout:
-            print(f"Blocked {url}")
+            print(f"Blocked {url}, retrying...")
+            time.sleep(5)
             return get_page(url)
 
     if r.status_code != 200:
-        raise Exception(f"Faild to GET {url}")
+        print(f"Faild to GET {url}, got status code {r.status_code}, retrying...")
+        time.sleep(5)
+        return get_page(url)
     return r.text
 
 
@@ -48,7 +53,7 @@ def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
 
 
 if __name__ == "__main__":
-    THREADS_COUNT = 256
+    THREADS_COUNT = 32
     
     # Count lines
     lines = 0
