@@ -1,5 +1,7 @@
 import requests
 
+from common import get_page, split
+
 BASE_URL = "https://www.weblio.jp/category/dictionary/sgkdj/"
 URL_TAILS = [
         "aa", "ii", "uu", "ee", "oo",
@@ -26,24 +28,6 @@ URL_TAILS = [
         "1",  "2",  "3",  "4",  "5",
         "6",  "7",  "8",  "9",  "0"
         ]
-
-
-def get_page(url: str, session: requests.Session | None = None) -> str:
-    if session:
-        r = session.get(url)
-    else:
-        r = requests.get(url)
-
-    if r.status_code != 200:
-        raise Exception(f"Faild to GET {url}")
-    return r.text
-
-
-def split(src: str, split: str) -> (str, str):
-    start = src.find(split)
-    if start == -1:
-        return (src, "")
-    return (src[:start], src[start + len(split):])
 
 
 if __name__ == "__main__":
