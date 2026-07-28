@@ -4,8 +4,10 @@
 # Output
 scripts/words_urls.txt
 words_urls.txt
+scripts/words_urls_formated.txt
 words_urls_formated.txt
 scripts/dictionary_entries.txt
+dictionary_entries.txt
 
 # Python
 **/__pycache__/
