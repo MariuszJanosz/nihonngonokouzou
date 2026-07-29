@@ -3,6 +3,7 @@ from common import split
 
 def extract_dictionary_entries(file: str) -> [str]:
     dictionary_entries = []
+    # Extract dictionary entries
     with open(file) as f:
         div_count = 0
         de = ""
@@ -21,11 +22,7 @@ def extract_dictionary_entries(file: str) -> [str]:
             if line.find("<h2 class=midashigo title=") != -1:
                 de += line.strip()
 
-    return dictionary_entries
-
-
-if __name__ == "__main__":
-    dictionary_entries = extract_dictionary_entries("dictionary_entries_no_images.txt")
+    # Remove white spaces
     for i in range(len(dictionary_entries)):
         de = dictionary_entries[i]
         e = ""
@@ -34,6 +31,7 @@ if __name__ == "__main__":
         e += "\n"
         dictionary_entries[i] = e
 
+    # Sort and dedup
     dictionary_entries.sort()
     deduped = [dictionary_entries[0]]
     i = 1
@@ -43,6 +41,11 @@ if __name__ == "__main__":
         i += 1
     dictionary_entries = deduped
 
+    return dictionary_entries
+
+
+if __name__ == "__main__":
+    dictionary_entries = extract_dictionary_entries("dictionary_entries_no_images.txt")
     with open("dictionary_entries_formated.txt", "w") as f:
         for de in dictionary_entries:
             f.write(de)
