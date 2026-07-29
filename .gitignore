@@ -8,6 +8,8 @@ scripts/words_urls_formated.txt
 words_urls_formated.txt
 scripts/dictionary_entries.txt
 dictionary_entries.txt
+scripts/dictionary_entries_no_images.txt
+dictionary_entries_no_images.txt
 
 # Python
 **/__pycache__/
