@@ -1,6 +1,3 @@
-from common import split
-
-
 def extract_dictionary_entries(file: str) -> [str]:
     dictionary_entries = []
     # Extract dictionary entries
@@ -45,7 +42,8 @@ def extract_dictionary_entries(file: str) -> [str]:
 
 
 if __name__ == "__main__":
-    dictionary_entries = extract_dictionary_entries("dictionary_entries_no_images.txt")
+    dictionary_entries = extract_dictionary_entries(
+        "dictionary_entries_no_images.txt"
+    )
     with open("dictionary_entries_formated.txt", "w") as f:
-        for de in dictionary_entries:
-            f.write(de)
+        f.writelines(dictionary_entries)

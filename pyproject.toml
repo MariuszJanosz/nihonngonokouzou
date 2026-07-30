@@ -12,6 +12,11 @@ dependencies = [
 dev = [
     "requests"
 ]
-
-tools = [
+dev-tools = [
+    "ruff"
 ]
+
+[tool.ruff]
+
+line-length = 80
+target-version = "py312"

@@ -1,5 +1,6 @@
-import requests
 import time
+
+import requests
 
 
 def get_page(url: str, session: requests.Session | None = None) -> str:
@@ -21,7 +22,9 @@ def get_page(url: str, session: requests.Session | None = None) -> str:
             return get_page(url)
 
     if r.status_code != 200:
-        print(f"Faild to GET {url}, got status code {r.status_code}, retrying...")
+        print(
+            f"Faild to GET {url}, got status code {r.status_code}, retrying..."
+        )
         time.sleep(5)
         return get_page(url)
     return r.text
@@ -31,4 +34,4 @@ def split(src: str, split: str) -> (str, str):
     start = src.find(split)
     if start == -1:
         return (src, "")
-    return (src[:start], src[start + len(split):])
+    return (src[:start], src[start + len(split) :])

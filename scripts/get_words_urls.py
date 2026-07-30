@@ -1,8 +1,8 @@
 import requests
-
 from common import get_page, split
 
 BASE_URL = "https://www.weblio.jp/category/dictionary/sgkdj/"
+# fmt: off
 URL_TAILS = [
         "aa", "ii", "uu", "ee", "oo",
         "ka", "ki", "ku", "ke", "ko",
@@ -28,6 +28,7 @@ URL_TAILS = [
         "1",  "2",  "3",  "4",  "5",
         "6",  "7",  "8",  "9",  "0"
         ]
+# fmt: on
 
 
 if __name__ == "__main__":

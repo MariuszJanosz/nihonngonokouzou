@@ -1,13 +1,13 @@
-import requests
 import threading
 
+import requests
 from common import get_page, split
 
 
 def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
     with open(dest_path, "w") as f:
         session = requests.Session()
-        session_reset = 0 # One session per 1000 requests
+        session_reset = 0  # One session per 1000 requests
         for url in urls:
             print(f"GET {url}")
             page = get_page(url, session)
@@ -23,7 +23,7 @@ def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
 
 if __name__ == "__main__":
     THREADS_COUNT = 32
-    
+
     # Count lines
     lines = 0
     with open("words_urls_formated.txt", "r") as f:
@@ -47,8 +47,9 @@ if __name__ == "__main__":
     # Start threads
     threads = []
     for i in range(THREADS_COUNT):
-        thr = threading.Thread(target=get_dictionary_entries,
-                               args=(f"/tmp/de_{i}", URLS_LISTS[i]))
+        thr = threading.Thread(
+            target=get_dictionary_entries, args=(f"/tmp/de_{i}", URLS_LISTS[i])
+        )
         threads.append(thr)
 
     for thr in threads:
