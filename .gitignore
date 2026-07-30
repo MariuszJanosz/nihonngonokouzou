@@ -16,6 +16,9 @@ dictionary_entries_formated.txt
 # Python
 **/__pycache__/
 
+# egg-info
+*.egg-info/
+
 # Postgres
 postgresql/db/
 postgresql/*.log

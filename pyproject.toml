@@ -1,0 +1,17 @@
+[project]
+
+name = "nihonngonokouzou"
+version = "0.1.0"
+description = "Japanese language map"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+[project.optional-dependencies]
+
+dev = [
+    "requests"
+]
+
+tools = [
+]
