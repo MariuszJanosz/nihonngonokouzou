@@ -6,12 +6,15 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 echo "==>Activating python venv..."
-. ${REPO_ROOT}/.venv/bin/activate
+. "${REPO_ROOT}/.venv/bin/activate"
 
 echo "==>Running ruff linting check..."
-ruff check ${REPO_ROOT}
+ruff check "${REPO_ROOT}"
 
 echo "==>Running ruff formatting check..."
-ruff format --check ${REPO_ROOT}
+ruff format --check "${REPO_ROOT}"
+
+echo "==>Running tests..."
+"${SCRIPT_DIR}/test.sh"
 
 echo "==>All checks passed!"
