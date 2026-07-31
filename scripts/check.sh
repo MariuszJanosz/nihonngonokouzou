@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+echo "==>Activating python venv..."
+. ${REPO_ROOT}/.venv/bin/activate
+
+echo "==>Running ruff linting check..."
+ruff check ${REPO_ROOT}
+
+echo "==>Running ruff formatting check..."
+ruff format --check ${REPO_ROOT}
+
+echo "==>All checks passed!"
