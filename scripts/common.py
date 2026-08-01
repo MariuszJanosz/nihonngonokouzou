@@ -3,31 +3,32 @@ import time
 import requests
 
 
-def get_page(url: str, session: requests.Session | None = None) -> str:
-    if session:
-        try:
-            r = session.get(url, timeout=5)
-        except requests.exceptions.Timeout:
-            print(f"Blocked {url}, retrying...")
-            del session
-            time.sleep(5)
-            session = requests.Session()
-            return get_page(url, session)
-    else:
-        try:
-            r = requests.get(url, timeout=5)
-        except requests.exceptions.Timeout:
-            print(f"Blocked {url}, retrying...")
-            time.sleep(5)
-            return get_page(url)
+def get_page(
+    url: str, session: requests.Session | None = None, max_attempts: int = 5
+) -> str:
+    for i in range(max_attempts):
+        r = None
+        if session:
+            try:
+                r = session.get(url, timeout=5)
+            except requests.exceptions.Timeout:
+                session = requests.Session()
+        else:
+            try:
+                r = requests.get(url, timeout=5)
+            except requests.exceptions.Timeout:
+                pass
 
-    if r.status_code != 200:
-        print(
-            f"Faild to GET {url}, got status code {r.status_code}, retrying..."
-        )
-        time.sleep(5)
-        return get_page(url)
-    return r.text
+        if r and r.status_code == 200:
+            return r.text
+        else:
+            print(f"GET {url} failed (Attempt {i + 1}/{max_attempts}).")
+            if i < max_attempts - 1:
+                time.sleep(5)
+
+    raise RuntimeError(
+        f"GET {url} failed after {max_attempts} attempts. Aborting!"
+    )
 
 
 def split(src: str, split: str) -> (str, str):
