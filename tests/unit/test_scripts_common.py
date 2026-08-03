@@ -30,18 +30,26 @@ def test_get_page_hello(mocked_sleep):
     assert get_page("https://example.com", session) == "hello"
 
 
-def test_get_page_3rd_attempt(mocked_sleep):
+def test_get_page_3rd_attempt(mocked_sleep, capsys):
     res404 = make_response(404, "")
     res200 = make_response(200, "3rd attempt")
     session = make_session(res404, res404, res200)
     assert get_page("https://example.com", session) == "3rd attempt"
+    assert (
+        capsys.readouterr().out
+        == "GET https://example.com failed (Attempt 1/5).\nGET https://example.com failed (Attempt 2/5).\n"
+    )
 
 
-def test_get_page_too_many_failures(mocked_sleep):
+def test_get_page_too_many_failures(mocked_sleep, capsys):
     res404 = make_response(404, "")
     session = make_session(res404, res404, res404, res404, res404)
     with pytest.raises(RuntimeError):
         get_page("https://example.com", session)
+    assert (
+        capsys.readouterr().out
+        == "GET https://example.com failed (Attempt 1/5).\nGET https://example.com failed (Attempt 2/5).\nGET https://example.com failed (Attempt 3/5).\nGET https://example.com failed (Attempt 4/5).\nGET https://example.com failed (Attempt 5/5).\n"
+    )
 
 
 def test_get_page_no_session():
