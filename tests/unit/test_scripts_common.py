@@ -25,6 +25,12 @@ def mocked_sleep():
         yield mocked_sleep
 
 
+@pytest.fixture
+def mocked_get():
+    with patch("scripts.common.requests.get") as mocked_get:
+        yield mocked_get
+
+
 def test_get_page_hello(mocked_sleep):
     session = make_session(make_response(200, "hello"))
     assert get_page("https://example.com", session) == "hello"
@@ -52,31 +58,28 @@ def test_get_page_too_many_failures(mocked_sleep, capsys):
     )
 
 
-def test_get_page_no_session():
-    with patch("scripts.common.requests.get") as mock_get:
-        mock_get.return_value = make_response(200, "hello")
-        assert get_page("https://example.com") == "hello"
-        mock_get.assert_called_once_with("https://example.com", timeout=5)
+def test_get_page_no_session(mocked_get):
+    mocked_get.return_value = make_response(200, "hello")
+    assert get_page("https://example.com") == "hello"
+    mocked_get.assert_called_once_with("https://example.com", timeout=5)
 
 
-def test_get_page_timeout_then_success(mocked_sleep):
-    with patch("scripts.common.requests.get") as mock_get:
-        mock_get.side_effect = [
-            requests.exceptions.Timeout,
-            make_response(200, "hello"),
-        ]
-        assert get_page("https://example.com") == "hello"
-        mock_get.assert_called_with("https://example.com", timeout=5)
-        assert mock_get.call_count == 2
+def test_get_page_timeout_then_success(mocked_sleep, mocked_get):
+    mocked_get.side_effect = [
+        requests.exceptions.Timeout,
+        make_response(200, "hello"),
+    ]
+    assert get_page("https://example.com") == "hello"
+    mocked_get.assert_called_with("https://example.com", timeout=5)
+    assert mocked_get.call_count == 2
 
 
-def test_get_page_5x_timeout(mocked_sleep):
-    with patch("scripts.common.requests.get") as mock_get:
-        t = requests.exceptions.Timeout
-        mock_get.side_effect = [t, t, t, t, t]
-        with pytest.raises(RuntimeError):
-            get_page("https://example.com")
-        assert mock_get.call_count == 5
+def test_get_page_5x_timeout(mocked_sleep, mocked_get):
+    t = requests.exceptions.Timeout
+    mocked_get.side_effect = [t, t, t, t, t]
+    with pytest.raises(RuntimeError):
+        get_page("https://example.com")
+    assert mocked_get.call_count == 5
 
 
 def test_get_page_session_timeout_then_success(mocked_sleep):
