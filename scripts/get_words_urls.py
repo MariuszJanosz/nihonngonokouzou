@@ -1,9 +1,10 @@
 import requests
-from common import get_page, split
 
-BASE_URL = "https://www.weblio.jp/category/dictionary/sgkdj/"
+from scripts.common import get_page, split
+
+BASE_URL: str = "https://www.weblio.jp/category/dictionary/sgkdj/"
 # fmt: off
-URL_TAILS = [
+URL_TAILS: list[str] = [
         "aa", "ii", "uu", "ee", "oo",
         "ka", "ki", "ku", "ke", "ko",
         "sa", "shi","su", "se", "so",
@@ -36,7 +37,7 @@ if __name__ == "__main__":
         for tail in URL_TAILS:
             session = requests.Session()
             page_number = 1
-            words = []
+            words: list[str] = []
             while True:
                 url = BASE_URL + tail + f"/{page_number}"
                 page_number += 1
@@ -50,5 +51,5 @@ if __name__ == "__main__":
                 _, page = split(page, "<ul class=CtgryUlR>\n")
                 right_column, page = split(page, "</ul>\n")
                 words.append(right_column)
-            words = "".join(words)
-            f.write(words)
+            words_str = "".join(words)
+            f.write(words_str)

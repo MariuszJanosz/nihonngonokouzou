@@ -16,6 +16,9 @@ ruff check "${REPO_ROOT}"
 echo "==>Running ruff formatting check..."
 ruff format --check "${REPO_ROOT}"
 
+echo "==>Running mypy type check..."
+mypy .
+
 echo "==>Running tests..."
 "${SCRIPT_DIR}/test.sh"
 

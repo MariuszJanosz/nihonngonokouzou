@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from unittest.mock import Mock, patch
 
 import pytest
@@ -6,37 +7,37 @@ import requests
 from scripts.common import get_page, split
 
 
-def make_response(status_code, text):
+def make_response(status_code: int, text: str) -> Mock:
     response = Mock()
     response.status_code = status_code
     response.text = text
     return response
 
 
-def make_session(*responses):
+def make_session(*responses: Mock) -> Mock:
     session = Mock()
     session.get.side_effect = [x for x in responses]
     return session
 
 
 @pytest.fixture
-def mocked_sleep():
+def mocked_sleep() -> Generator[Mock, None, None]:
     with patch("scripts.common.time.sleep") as mocked_sleep:
         yield mocked_sleep
 
 
 @pytest.fixture
-def mocked_get():
+def mocked_get() -> Generator[Mock, None, None]:
     with patch("scripts.common.requests.get") as mocked_get:
         yield mocked_get
 
 
-def test_get_page_hello(mocked_sleep):
+def test_get_page_hello(mocked_sleep: Mock) -> None:
     session = make_session(make_response(200, "hello"))
     assert get_page("https://example.com", session) == "hello"
 
 
-def test_get_page_3rd_attempt(mocked_sleep, capsys):
+def test_get_page_3rd_attempt(mocked_sleep: Mock, capsys: Mock) -> None:
     res404 = make_response(404, "")
     res200 = make_response(200, "3rd attempt")
     session = make_session(res404, res404, res200)
@@ -47,7 +48,7 @@ def test_get_page_3rd_attempt(mocked_sleep, capsys):
     )
 
 
-def test_get_page_too_many_failures(mocked_sleep, capsys):
+def test_get_page_too_many_failures(mocked_sleep: Mock, capsys: Mock) -> None:
     res404 = make_response(404, "")
     session = make_session(res404, res404, res404, res404, res404)
     with pytest.raises(RuntimeError):
@@ -58,13 +59,15 @@ def test_get_page_too_many_failures(mocked_sleep, capsys):
     )
 
 
-def test_get_page_no_session(mocked_get):
+def test_get_page_no_session(mocked_get: Mock) -> None:
     mocked_get.return_value = make_response(200, "hello")
     assert get_page("https://example.com") == "hello"
     mocked_get.assert_called_once_with("https://example.com", timeout=5)
 
 
-def test_get_page_timeout_then_success(mocked_sleep, mocked_get):
+def test_get_page_timeout_then_success(
+    mocked_sleep: Mock, mocked_get: Mock
+) -> None:
     mocked_get.side_effect = [
         requests.exceptions.Timeout,
         make_response(200, "hello"),
@@ -74,7 +77,7 @@ def test_get_page_timeout_then_success(mocked_sleep, mocked_get):
     assert mocked_get.call_count == 2
 
 
-def test_get_page_5x_timeout(mocked_sleep, mocked_get):
+def test_get_page_5x_timeout(mocked_sleep: Mock, mocked_get: Mock) -> None:
     t = requests.exceptions.Timeout
     mocked_get.side_effect = [t, t, t, t, t]
     with pytest.raises(RuntimeError):
@@ -82,7 +85,7 @@ def test_get_page_5x_timeout(mocked_sleep, mocked_get):
     assert mocked_get.call_count == 5
 
 
-def test_get_page_session_timeout_then_success(mocked_sleep):
+def test_get_page_session_timeout_then_success(mocked_sleep: Mock) -> None:
     with patch("scripts.common.requests.Session") as mock_session_constructor:
         s1 = Mock()
         s1.get.side_effect = [requests.exceptions.Timeout]
@@ -105,5 +108,5 @@ def test_get_page_session_timeout_then_success(mocked_sleep):
         ("aaaabbbb", "", "", "aaaabbbb"),
     ],
 )
-def test_split(source, pattern, left, right):
+def test_split(source: str, pattern: str, left: str, right: str) -> None:
     assert split(source, pattern) == (left, right)

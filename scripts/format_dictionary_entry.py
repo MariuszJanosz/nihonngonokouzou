@@ -1,4 +1,4 @@
-def extract_dictionary_entries(file: str) -> [str]:
+def extract_dictionary_entries(file: str) -> list[str]:
     dictionary_entries = []
     # Extract dictionary entries
     with open(file) as f:

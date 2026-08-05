@@ -31,7 +31,7 @@ def get_page(
     )
 
 
-def split(src: str, split: str) -> (str, str):
+def split(src: str, split: str) -> tuple[str, str]:
     start = src.find(split)
     if start == -1:
         return (src, "")

@@ -14,7 +14,8 @@ dev = [
 ]
 dev-tools = [
     "ruff",
-    "pytest"
+    "pytest",
+    "mypy"
 ]
 
 [tool.ruff]
@@ -25,3 +26,20 @@ target-version = "py312"
 [tool.pytest.ini_options]
 
 pythonpath = ["."]
+
+[tool.mypy]
+
+python_version = "3.12"
+pretty = true
+show_error_codes = true
+warn_unreachable = true
+extra_checks = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_any_generics = true
+warn_return_any = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+strict_equality = true
+explicit_package_bases = true

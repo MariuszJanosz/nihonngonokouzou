@@ -1,7 +1,8 @@
 import threading
 
 import requests
-from common import get_page, split
+
+from scripts.common import get_page, split
 
 
 def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
@@ -32,10 +33,10 @@ if __name__ == "__main__":
 
     # Prepare input urls lists for threads
     URLS_PER_THREAD = lines // THREADS_COUNT
-    URLS_LISTS = []
+    URLS_LISTS: list[list[str]] = []
     with open("words_urls_formated.txt", "r") as f:
         for i in range(THREADS_COUNT):
-            URL_LIST = []
+            URL_LIST: list[str] = []
             URLS_LISTS.append(URL_LIST)
             for j in range(URLS_PER_THREAD):
                 line = f.readline()
@@ -45,7 +46,7 @@ if __name__ == "__main__":
                 URL_LIST.append(url)
 
     # Start threads
-    threads = []
+    threads: list[threading.Thread] = []
     for i in range(THREADS_COUNT):
         thr = threading.Thread(
             target=get_dictionary_entries, args=(f"/tmp/de_{i}", URLS_LISTS[i])
