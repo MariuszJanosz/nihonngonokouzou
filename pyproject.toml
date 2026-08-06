@@ -15,7 +15,8 @@ dev = [
 dev-tools = [
     "ruff",
     "pytest",
-    "mypy"
+    "mypy",
+    "pytest-cov"
 ]
 
 [tool.ruff]
@@ -43,3 +44,4 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 strict_equality = true
 explicit_package_bases = true
+
