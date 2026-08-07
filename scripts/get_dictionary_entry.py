@@ -18,7 +18,6 @@ def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
             session_reset += 1
             if session_reset >= 1000:
                 session_reset = 0
-                del session
                 session = requests.Session()
 
 
@@ -38,7 +37,12 @@ if __name__ == "__main__":
         for i in range(THREADS_COUNT):
             URL_LIST: list[str] = []
             URLS_LISTS.append(URL_LIST)
-            for j in range(URLS_PER_THREAD):
+            limit = (
+                URLS_PER_THREAD
+                if i + 1 < THREADS_COUNT
+                else lines - (THREADS_COUNT - 1) * URLS_PER_THREAD
+            )
+            for j in range(limit):
                 line = f.readline()
                 if line == "":
                     break
