@@ -45,3 +45,20 @@ warn_redundant_casts = true
 strict_equality = true
 explicit_package_bases = true
 
+[tool.coverage.run]
+
+source = ["scripts"]
+branch = true
+omit = ["tests/*"]
+
+[tool.coverage.report]
+
+show_missing = true
+skip_covered = true
+skip_empty = true
+fail_under = 90
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
