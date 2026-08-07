@@ -7,4 +7,4 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 cd "${REPO_ROOT}"
 
-pytest "${REPO_ROOT}/tests" --cov --cov-report=html
+pytest "${REPO_ROOT}/tests" --cov --cov-report=html --cov-report=term

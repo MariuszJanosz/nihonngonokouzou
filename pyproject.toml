@@ -49,7 +49,14 @@ explicit_package_bases = true
 
 source = ["scripts"]
 branch = true
-omit = ["tests/*"]
+omit = [
+    "tests/*",
+    "scripts/get_words_urls.py",
+    "scripts/get_dictionary_entry.py",
+    "scripts/dictionary_entries_remove_images.py",
+    "scripts/format_dictionary_entry.py",
+    "scripts/format_words_urls.py"
+]
 
 [tool.coverage.report]
 
