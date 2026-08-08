@@ -44,25 +44,36 @@ def test_get_page_3rd_attempt(mocked_sleep: Mock, capsys: Mock) -> None:
     assert get_page("https://example.com", session) == "3rd attempt"
     assert (
         capsys.readouterr().out
-        == "GET https://example.com failed (Attempt 1/5).\nGET https://example.com failed (Attempt 2/5).\n"
+        == "GET https://example.com failed (Attempt 1/10).\nGET https://example.com failed (Attempt 2/10).\n"
     )
 
 
 def test_get_page_too_many_failures(mocked_sleep: Mock, capsys: Mock) -> None:
     res404 = make_response(404, "")
-    session = make_session(res404, res404, res404, res404, res404)
+    session = make_session(
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+        res404,
+    )
     with pytest.raises(RuntimeError):
         get_page("https://example.com", session)
     assert (
         capsys.readouterr().out
-        == "GET https://example.com failed (Attempt 1/5).\nGET https://example.com failed (Attempt 2/5).\nGET https://example.com failed (Attempt 3/5).\nGET https://example.com failed (Attempt 4/5).\nGET https://example.com failed (Attempt 5/5).\n"
+        == "GET https://example.com failed (Attempt 1/10).\nGET https://example.com failed (Attempt 2/10).\nGET https://example.com failed (Attempt 3/10).\nGET https://example.com failed (Attempt 4/10).\nGET https://example.com failed (Attempt 5/10).\nGET https://example.com failed (Attempt 6/10).\nGET https://example.com failed (Attempt 7/10).\nGET https://example.com failed (Attempt 8/10).\nGET https://example.com failed (Attempt 9/10).\nGET https://example.com failed (Attempt 10/10).\n"
     )
 
 
 def test_get_page_no_session(mocked_get: Mock) -> None:
     mocked_get.return_value = make_response(200, "hello")
     assert get_page("https://example.com") == "hello"
-    mocked_get.assert_called_once_with("https://example.com", timeout=5)
+    mocked_get.assert_called_once_with("https://example.com", timeout=1)
 
 
 def test_get_page_timeout_then_success(
@@ -73,16 +84,16 @@ def test_get_page_timeout_then_success(
         make_response(200, "hello"),
     ]
     assert get_page("https://example.com") == "hello"
-    mocked_get.assert_called_with("https://example.com", timeout=5)
+    mocked_get.assert_called_with("https://example.com", timeout=2)
     assert mocked_get.call_count == 2
 
 
-def test_get_page_5x_timeout(mocked_sleep: Mock, mocked_get: Mock) -> None:
+def test_get_page_10x_timeout(mocked_sleep: Mock, mocked_get: Mock) -> None:
     t = requests.exceptions.Timeout
-    mocked_get.side_effect = [t, t, t, t, t]
+    mocked_get.side_effect = [t, t, t, t, t, t, t, t, t, t]
     with pytest.raises(RuntimeError):
         get_page("https://example.com")
-    assert mocked_get.call_count == 5
+    assert mocked_get.call_count == 10
 
 
 def test_get_page_session_timeout_then_success(mocked_sleep: Mock) -> None:
