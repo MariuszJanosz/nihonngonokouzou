@@ -11,12 +11,12 @@ def get_page(
         if session:
             try:
                 r = session.get(url, timeout=2**i)
-            except requests.exceptions.Timeout:
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
                 session = requests.Session()
         else:
             try:
                 r = requests.get(url, timeout=2**i)
-            except requests.exceptions.Timeout:
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
                 pass
 
         if r and r.status_code == 200:
