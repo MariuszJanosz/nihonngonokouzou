@@ -1,23 +1,25 @@
 name: ci
-  on:
-    push:
-    pull_request:
-  jobs:
-    ci:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+on:
+  push:
+  pull_request:
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
 
-      - name: Install project
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev,dev-tools]"
+    - name: Install project
+      run: |
+        python -m venv .venv
+        . .venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install -e ".[dev,dev-tools]"
 
-      - name: Run CI
-        run: ./scripts/chech.sh
+    - name: Run CI
+      run: ./scripts/check.sh
