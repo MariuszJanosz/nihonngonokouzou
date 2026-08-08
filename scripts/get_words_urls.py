@@ -1,6 +1,6 @@
 import requests
 
-from scripts.common import get_page, split
+from scripts.common import cut_out, get_page
 
 BASE_URL: str = "https://www.weblio.jp/category/dictionary/sgkdj/"
 # fmt: off
@@ -43,13 +43,15 @@ if __name__ == "__main__":
                 page_number += 1
                 print(f"GET {url}")
                 page = get_page(url, session)
-                _, page = split(page, "<ul class=CtgryUlL>\n")
-                left_column, page = split(page, "</ul>\n")
+                left_column, page = cut_out(
+                    page, "<ul class=CtgryUlL>\n", "</ul>\n"
+                )
                 if left_column == "":
                     break
                 words.append(left_column)
-                _, page = split(page, "<ul class=CtgryUlR>\n")
-                right_column, page = split(page, "</ul>\n")
+                right_column, page = cut_out(
+                    page, "<ul class=CtgryUlR>\n", "</ul>\n"
+                )
                 words.append(right_column)
             words_str = "".join(words)
             f.write(words_str)

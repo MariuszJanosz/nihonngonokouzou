@@ -36,3 +36,8 @@ def split(src: str, split: str) -> tuple[str, str]:
     if start == -1:
         return (src, "")
     return (src[:start], src[start + len(split) :])
+
+
+def cut_out(source: str, prefix: str, suffix: str) -> tuple[str, str]:
+    _, tmp = split(source, prefix)
+    return split(tmp, suffix)

@@ -2,7 +2,7 @@ import threading
 
 import requests
 
-from scripts.common import get_page, split
+from scripts.common import cut_out, get_page
 
 
 def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
@@ -12,9 +12,12 @@ def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:
         for url in urls:
             print(f"GET {url}")
             page = get_page(url, session)
-            _, page = split(page, "<!--開始 デジタル大辞泉 -->\n")
-            page, _ = split(page, "<!--終了 デジタル大辞泉-->")
-            f.write(page)
+            dictionary_entry_block, _tail = cut_out(
+                page,
+                "<!--開始 デジタル大辞泉 -->\n",
+                "<!--終了 デジタル大辞泉-->",
+            )
+            f.write(dictionary_entry_block)
             session_reset += 1
             if session_reset >= 1000:
                 session_reset = 0
@@ -44,8 +47,6 @@ if __name__ == "__main__":
             )
             for j in range(limit):
                 line = f.readline()
-                if line == "":
-                    break
                 url = line.split(" ")[-1].strip()
                 URL_LIST.append(url)
 

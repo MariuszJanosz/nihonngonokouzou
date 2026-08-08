@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 import pytest
 import requests
 
-from scripts.common import get_page, split
+from scripts.common import cut_out, get_page, split
 
 
 def make_response(status_code: int, text: str) -> Mock:
@@ -110,3 +110,22 @@ def test_get_page_session_timeout_then_success(mocked_sleep: Mock) -> None:
 )
 def test_split(source: str, pattern: str, left: str, right: str) -> None:
     assert split(source, pattern) == (left, right)
+
+
+@pytest.mark.parametrize(
+    "source,prefix,suffix,mid,tail",
+    [
+        ("abcdefgh", "b", "g", "cdef", "h"),
+        ("abcdefgh", "z", "g", "", ""),
+        ("aaa", "a", "a", "", "a"),
+        ("aaa", "", "a", "", "aa"),
+        ("aba", "ab", "ba", "a", ""),
+        ("abaxxxc", "a", "c", "baxxx", ""),
+        ("abcdefg", "h", "i", "", ""),
+        ("abcdefg", "", "", "", "abcdefg"),
+    ],
+)
+def test_cut_out(
+    source: str, prefix: str, suffix: str, mid: str, tail: str
+) -> None:
+    assert cut_out(source, prefix, suffix) == (mid, tail)
