@@ -11,12 +11,18 @@ def get_page(
         if session:
             try:
                 r = session.get(url, timeout=2**i)
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+            ):
                 session = requests.Session()
         else:
             try:
                 r = requests.get(url, timeout=2**i)
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+            except (
+                requests.exceptions.Timeout,
+                requests.exceptions.ConnectionError,
+            ):
                 pass
 
         if r and r.status_code == 200:
@@ -41,3 +47,32 @@ def split(src: str, split: str) -> tuple[str, str]:
 def cut_out(source: str, prefix: str, suffix: str) -> tuple[str, str]:
     _, tmp = split(source, prefix)
     return split(tmp, suffix)
+
+
+def remove_html_comment(line: str, inside_comment: bool) -> tuple[str, bool]:
+    res = ""
+    while line != "":
+        if not inside_comment:
+            if line.find("<!--") != -1:
+                inside_comment = True
+            tmp, line = split(line, "<!--")
+            res += tmp
+        else:
+            if line.find("-->") != -1:
+                inside_comment = False
+            tmp, line = split(line, "-->")
+    return (res, inside_comment)
+
+
+def remove_html_element(line: str, element: str) -> str:
+    res = ""
+    while line != "":
+        tmp, line = split(line, f"<{element}")
+        res += tmp
+        tmp, line = split(line, ">")
+    line = res
+    res = ""
+    while line != "":
+        tmp, line = split(line, f"</{element}>")
+        res += tmp
+    return res

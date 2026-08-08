@@ -55,7 +55,8 @@ omit = [
     "scripts/get_dictionary_entry.py",
     "scripts/dictionary_entries_remove_images.py",
     "scripts/format_dictionary_entry.py",
-    "scripts/format_words_urls.py"
+    "scripts/format_words_urls.py",
+    "scripts/clean_dictionary_entries.py",
 ]
 
 [tool.coverage.report]

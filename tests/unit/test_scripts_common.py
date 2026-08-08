@@ -4,7 +4,13 @@ from unittest.mock import Mock, patch
 import pytest
 import requests
 
-from scripts.common import cut_out, get_page, split
+from scripts.common import (
+    cut_out,
+    get_page,
+    remove_html_comment,
+    remove_html_element,
+    split,
+)
 
 
 def make_response(status_code: int, text: str) -> Mock:
@@ -140,3 +146,28 @@ def test_cut_out(
     source: str, prefix: str, suffix: str, mid: str, tail: str
 ) -> None:
     assert cut_out(source, prefix, suffix) == (mid, tail)
+
+
+@pytest.mark.parametrize(
+    "source,inside_comment,result",
+    [
+        ("<!---->", False, ("", False)),
+        ("<!--->", False, ("", True)),
+        ("<!->", False, ("<!->", False)),
+    ],
+)
+def test_remove_html_comment(
+    source: str, inside_comment: bool, result: tuple[str, bool]
+) -> None:
+    assert remove_html_comment(source, inside_comment) == result
+
+
+@pytest.mark.parametrize(
+    "source,element,result",
+    [
+        ("", "div", ""),
+        ("a", "div", "a"),
+    ],
+)
+def test_remove_html_element(source: str, element: str, result: str) -> None:
+    assert remove_html_element(source, element) == result

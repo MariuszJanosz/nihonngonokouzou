@@ -12,6 +12,8 @@ scripts/dictionary_entries_no_images.txt
 dictionary_entries_no_images.txt
 scripts/dictionary_entries_formated.txt
 dictionary_entries_formated.txt
+scripts/dictionary_entries_formated_cleaned.txt
+dictionary_entries_formated_cleaned.txt
 
 # Python
 **/__pycache__/
