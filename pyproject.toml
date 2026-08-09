@@ -17,7 +17,8 @@ dev-tools = [
     "pytest",
     "mypy",
     "pytest-cov",
-    "pre-commit"
+    "pre-commit",
+    "pip-audit"
 ]
 
 [tool.ruff]

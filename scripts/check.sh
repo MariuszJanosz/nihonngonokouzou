@@ -22,4 +22,7 @@ mypy .
 echo "==>Running tests..."
 "${SCRIPT_DIR}/test.sh"
 
+echo "==>Running dependency scanning..."
+pip-audit
+
 echo "==>All checks passed!"
