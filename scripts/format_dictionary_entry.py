@@ -11,7 +11,8 @@ def extract_dictionary_entries(file: str) -> list[str]:
                     div_count = 1
                 else:
                     div_count += line.count("<div") - line.count("</div>")
-                    assert div_count >= 0
+                    if div_count < 0:
+                        raise RuntimeError(f"div_count: {div_count} < 0")
                     if div_count == 0:
                         dictionary_entries.append(de)
                         de = ""

@@ -18,7 +18,8 @@ dev-tools = [
     "mypy",
     "pytest-cov",
     "pre-commit",
-    "pip-audit"
+    "pip-audit",
+    "bandit"
 ]
 
 [tool.ruff]
@@ -71,4 +72,11 @@ precision = 2
 exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
+]
+
+[tool.bandit]
+
+exclude_dirs = [
+    ".venv",
+    "tests",
 ]

@@ -1,4 +1,5 @@
 import threading
+from tempfile import TemporaryDirectory
 
 import requests
 
@@ -50,21 +51,24 @@ if __name__ == "__main__":
                 url = line.split(" ")[-1].strip()
                 URL_LIST.append(url)
 
-    # Start threads
-    threads: list[threading.Thread] = []
-    for i in range(THREADS_COUNT):
-        thr = threading.Thread(
-            target=get_dictionary_entries, args=(f"/tmp/de_{i}", URLS_LISTS[i])
-        )
-        threads.append(thr)
-
-    for thr in threads:
-        thr.start()
-
-    for thr in threads:
-        thr.join()
-
-    with open("dictionary_entries.txt", "w") as f:
+    # Prepare temp_dir
+    with TemporaryDirectory() as tmp_dir:
+        # Start threads
+        threads: list[threading.Thread] = []
         for i in range(THREADS_COUNT):
-            with open(f"/tmp/de_{i}", "r") as g:
-                f.write(g.read())
+            thr = threading.Thread(
+                target=get_dictionary_entries,
+                args=(str(tmp_dir) + f"/de_{i}", URLS_LISTS[i]),
+            )
+            threads.append(thr)
+
+        for thr in threads:
+            thr.start()
+
+        for thr in threads:
+            thr.join()
+
+        with open("dictionary_entries.txt", "w") as f:
+            for i in range(THREADS_COUNT):
+                with open(str(tmp_dir) + f"/de_{i}", "r") as g:
+                    f.write(g.read())

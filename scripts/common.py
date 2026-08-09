@@ -7,10 +7,11 @@ def get_page(
     url: str, session: requests.Session | None = None, max_attempts: int = 10
 ) -> str:
     for i in range(max_attempts):
+        timeout = 2**i
         r = None
         if session:
             try:
-                r = session.get(url, timeout=2**i)
+                r = session.get(url, timeout=timeout)
             except (
                 requests.exceptions.Timeout,
                 requests.exceptions.ConnectionError,
@@ -18,7 +19,7 @@ def get_page(
                 session = requests.Session()
         else:
             try:
-                r = requests.get(url, timeout=2**i)
+                r = requests.get(url, timeout=timeout)
             except (
                 requests.exceptions.Timeout,
                 requests.exceptions.ConnectionError,

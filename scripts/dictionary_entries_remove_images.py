@@ -14,4 +14,5 @@ if __name__ == "__main__":
             if line.strip() != "<div class=SgkdjImg>" and div_count != 0:
                 div_count += line.count("<div") - line.count("</div>")
 
-            assert div_count >= 0
+            if div_count < 0:
+                raise RuntimeError(f"div_count: {div_count} < 0")

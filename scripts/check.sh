@@ -17,12 +17,15 @@ echo "==>Running ruff formatting check..."
 ruff format --check "${REPO_ROOT}"
 
 echo "==>Running mypy type check..."
-mypy .
+mypy "${REPO_ROOT}"
 
 echo "==>Running tests..."
 "${SCRIPT_DIR}/test.sh"
 
 echo "==>Running dependency scanning..."
 pip-audit
+
+echo "==>Running bandit..."
+bandit -c "${REPO_ROOT}/pyproject.toml" -r "${REPO_ROOT}" -ll
 
 echo "==>All checks passed!"
