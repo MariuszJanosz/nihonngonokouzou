@@ -5,12 +5,14 @@ version = "0.1.0"
 description = "Japanese language map"
 requires-python = ">=3.12"
 dependencies = [
+    "psycopg2"
 ]
 
 [project.optional-dependencies]
 
 dev = [
-    "requests"
+    "requests",
+    "types-psycopg2"
 ]
 dev-tools = [
     "ruff",
@@ -60,6 +62,7 @@ omit = [
     "scripts/format_dictionary_entry.py",
     "scripts/format_words_urls.py",
     "scripts/clean_dictionary_entries.py",
+    "scripts/populate_db_dictionary_entry_table.py",
 ]
 
 [tool.coverage.report]
