@@ -29,6 +29,7 @@ dictionary_entries_formated_cleaned.txt
 # Postgres
 postgresql/db/
 postgresql/*.log
+*.log
 
 # Pytest
 .coverage
