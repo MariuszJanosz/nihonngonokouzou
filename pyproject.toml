@@ -7,7 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "psycopg[binary]",
     "sqlalchemy",
-    "alembic"
+    "fastapi[standard]",
 ]
 
 [project.optional-dependencies]
@@ -22,8 +22,12 @@ dev-tools = [
     "pytest-cov",
     "pre-commit",
     "pip-audit",
-    "bandit"
+    "bandit",
+    "alembic",
 ]
+
+[tool.setuptools.packages.find]
+include = []
 
 [tool.ruff]
 
@@ -84,3 +88,7 @@ exclude_dirs = [
     ".venv",
     "tests",
 ]
+
+[tool.fastapi]
+
+entrypoint = "main:app"
