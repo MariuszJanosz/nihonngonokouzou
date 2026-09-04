@@ -3,7 +3,7 @@ from tempfile import TemporaryDirectory
 
 import requests
 
-from scripts.common import cut_out, get_page
+from .common import cut_out, get_page
 
 
 def get_dictionary_entries(dest_path: str, urls: list[str]) -> None:

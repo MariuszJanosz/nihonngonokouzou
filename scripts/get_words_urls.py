@@ -1,6 +1,6 @@
 import requests
 
-from scripts.common import cut_out, get_page
+from .common import cut_out, get_page
 
 BASE_URL: str = "https://www.weblio.jp/category/dictionary/sgkdj/"
 # fmt: off
