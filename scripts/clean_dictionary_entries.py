@@ -1,4 +1,4 @@
-from scripts.common import remove_html_comment, remove_html_element
+from .common import remove_html_comment, remove_html_element
 
 if __name__ == "__main__":
     with (
