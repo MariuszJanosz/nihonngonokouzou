@@ -11,5 +11,6 @@ class DictionaryEntry(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     key: Mapped[str] = mapped_column(String)
+    search_key: Mapped[str] = mapped_column(String)
     reading: Mapped[str] = mapped_column(String)
     entry: Mapped[str] = mapped_column(String)
