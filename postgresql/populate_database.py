@@ -55,9 +55,16 @@ if __name__ == "__main__":
                 reading, entry = split(line, "</p>")
             entry = entry.strip()
             search_key = make_search_key(key)
-            lst.append({"key": key, "search_key": search_key, "reading": reading, "entry": entry})
+            lst.append(
+                {
+                    "key": key,
+                    "search_key": search_key,
+                    "reading": reading,
+                    "entry": entry,
+                }
+            )
         stmt = text(
-                "INSERT INTO dictionary_entries (key, search_key, reading, entry) VALUES (:key, :search_key, :reading, :entry);"
+            "INSERT INTO dictionary_entries (key, search_key, reading, entry) VALUES (:key, :search_key, :reading, :entry);"
         )
         session.execute(stmt, lst)
         session.commit()

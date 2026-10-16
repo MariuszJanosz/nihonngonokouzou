@@ -1,5 +1,5 @@
-from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 
 def mount_path(app: FastAPI, path: str) -> None:
