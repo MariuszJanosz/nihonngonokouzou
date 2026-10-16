@@ -11,7 +11,6 @@ from collections.abc import Sequence
 import sqlalchemy as sa
 
 from alembic import op
-
 from postgresql.populate_database import make_search_key
 
 # revision identifiers, used by Alembic.
