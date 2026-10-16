@@ -12,35 +12,13 @@ import sqlalchemy as sa
 
 from alembic import op
 
+from postgresql.populate_database import make_search_key
+
 # revision identifiers, used by Alembic.
 revision: str = "38e0106b0697"
 down_revision: str | Sequence[str] | None = "89b1d64df278"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
-
-
-def make_search_key(key: str) -> str:
-    to_remove = (
-        " !&'()+,-./:;<=>?@〇〈〉《》「」『』【】〔〕・ー＃＆（）＊＋－／＝｜‐"
-    )
-    res = ""
-    i = 0
-    while i < len(key):
-        if (
-            i + 12 < len(key)
-            and key[i] == "<"
-            and key[i + 1] == "s"
-            and key[i + 2] == "u"
-            and key[i + 3] == "p"
-            and key[i + 4] == ">"
-        ):
-            i += 12
-        elif key[i] in to_remove:
-            i += 1
-        else:
-            res += key[i]
-            i += 1
-    return res
 
 
 def upgrade() -> None:
